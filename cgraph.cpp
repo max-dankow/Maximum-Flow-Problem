@@ -11,12 +11,6 @@ void CGraph::addEdge(const CEdge &newEdge)
     edgesList[newEdge.firstVertexIndex].push_back(newEdge);
 }
 
-void CGraph::addEdgeUndirected(const CEdge &newEdge)
-{
-    addEdge(newEdge);
-    addEdge(CEdge(newEdge.secondVertexIndex, newEdge.firstVertexIndex, newEdge.weight));
-}
-
 void CGraph::depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<size_t> &way)
 {
     assert(vertexIndex < verticesAmount);
@@ -32,11 +26,14 @@ void CGraph::depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, st
     }
 }
 
-std::vector<size_t> CGraph::rebuildWay()
+bool CGraph::getEdge(size_t firstVertexIndex, size_t secondVertexIndex, CEdge &result) const
 {
-    std::vector<bool> visited(verticesAmount, false);
-    std::vector<size_t> way;
-    depthFirstSearch(0, visited, way);
-    way.push_back(0);
-    return way;
+    assert(firstVertexIndex < verticesAmount && secondVertexIndex < verticesAmount);
+    CEdge edgeToFind(firstVertexIndex, secondVertexIndex, 0, 0, 0);
+    auto searchResultIt = find(edgesList[firstVertexIndex].begin(), edgesList[firstVertexIndex].end(), edgeToFind);
+    if (searchResultIt != edgesList[firstVertexIndex].end())
+    {
+        result =*searchResultIt;
+    }
+    return searchResultIt != edgesList[firstVertexIndex].end();
 }
