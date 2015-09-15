@@ -6,12 +6,15 @@
 #include <assert.h>
 #include <algorithm>
 #include <iostream>
+#include <queue>
+#include <limits>
 
 struct CEdge
 {
     CEdge(size_t newFirstVertex, size_t newSecondVertex, double newWeight, double newCapacity, double newFlow):
         firstVertexIndex(newFirstVertex), secondVertexIndex(newSecondVertex),
         weight(newWeight), capacity(newCapacity), flow(newFlow){}
+    CEdge(){}
     bool operator <(const CEdge &other) const
     {
         return weight < other.weight;
@@ -28,13 +31,15 @@ struct CEdge
 class CGraph
 {
 public:
+    const int NO_ANCESTOR = -1;
+    std::vector<std::vector<CEdge> > edgesList;
     CGraph(size_t newVerticesAmount);
     void addEdge(const CEdge &newEdge);
-    CEdge getEdge(size_t firstVertexIndex, size_t secondVertexIndex, CEdge &result) const;
+    bool getEdge(size_t firstVertexIndex, size_t secondVertexIndex, std::vector<CEdge>::iterator& result);
+    void depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<size_t> &way);
+    void breadthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<ssize_t> &ancestors);
 private:
     size_t verticesAmount;
-    std::vector<std::vector<CEdge> > edgesList;
-    void depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<size_t> &way);
 };
 
 #endif // CGRAPH_H

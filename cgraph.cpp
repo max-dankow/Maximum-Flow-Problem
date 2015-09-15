@@ -26,14 +26,39 @@ void CGraph::depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, st
     }
 }
 
-bool CGraph::getEdge(size_t firstVertexIndex, size_t secondVertexIndex, CEdge &result) const
+bool CGraph::getEdge(size_t firstVertexIndex, size_t secondVertexIndex, std::vector<CEdge>::iterator& result)
 {
     assert(firstVertexIndex < verticesAmount && secondVertexIndex < verticesAmount);
     CEdge edgeToFind(firstVertexIndex, secondVertexIndex, 0, 0, 0);
-    auto searchResultIt = find(edgesList[firstVertexIndex].begin(), edgesList[firstVertexIndex].end(), edgeToFind);
+    std::vector<CEdge>::iterator searchResultIt = find(edgesList[firstVertexIndex].begin(), edgesList[firstVertexIndex].end(), edgeToFind);
     if (searchResultIt != edgesList[firstVertexIndex].end())
     {
-        result =*searchResultIt;
+        result = searchResultIt;
     }
     return searchResultIt != edgesList[firstVertexIndex].end();
+}
+
+
+void CGraph::breadthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<ssize_t> &ancestors)
+{
+    visited.assign(verticesAmount, false);
+    ancestors.assign(verticesAmount, NO_ANCESTOR);
+    std::queue<size_t> verticesQueue;
+    verticesQueue.push(vertexIndex);
+    visited[vertexIndex] = true;
+
+    while(!verticesQueue.empty())
+    {
+        size_t currentVertex = verticesQueue.front();
+        verticesQueue.pop();
+        for (auto it = edgesList[currentVertex].begin(); it != edgesList[currentVertex].end(); ++it)
+        {
+            if (!visited[it->secondVertexIndex] && it->weight != std::numeric_limits<double>::infinity())
+            {
+                visited[it->secondVertexIndex] = true;
+                ancestors[it->secondVertexIndex] = currentVertex;
+                verticesQueue.push(it->secondVertexIndex);
+            }
+        }
+    }
 }
