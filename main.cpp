@@ -10,7 +10,7 @@ CNetwork readInput()
         size_t firstVertex, secondVertex;
         double capacity;
         std::cin >> firstVertex >> secondVertex >> capacity;
-        inputNetwork.graph.addEdge(CEdge(firstVertex - 1, secondVertex - 1, 1, capacity, 0));
+        inputNetwork.addEdge(CEdge(firstVertex - 1, secondVertex - 1, 1, capacity, 0));
     }
     return inputNetwork;
 }

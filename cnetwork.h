@@ -2,12 +2,11 @@
 #define CNETWORK_H
 #include "cgraph.h"
 
-class CNetwork
+class CNetwork : public CGraph
 {
 public:
-    CGraph graph;
     CNetwork(size_t newVerticesAmount, size_t newSource, size_t newSink):
-        graph(CGraph(newVerticesAmount)), sourceVertex(newSource), sinkVertex(newSink){}
+        CGraph(newVerticesAmount), sourceVertex(newSource), sinkVertex(newSink){}
     void algorithmEdmondsKarp();
     double getFlowAmount() const;
 private:

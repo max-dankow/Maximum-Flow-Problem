@@ -32,13 +32,14 @@ class CGraph
 {
 public:
     const int NO_ANCESTOR = -1;
-    std::vector<std::vector<CEdge> > edgesList;
     CGraph(size_t newVerticesAmount);
-    void addEdge(const CEdge &newEdge);
-    bool getEdge(size_t firstVertexIndex, size_t secondVertexIndex, std::vector<CEdge>::iterator& result);
     void depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<size_t> &way) const;
     void breadthFirstSearch(size_t startVertexIndex, std::vector<bool> &visited, std::vector<ssize_t> &ancestors);
+    void addEdge(const CEdge &newEdge);
+protected:
     size_t verticesAmount;
+    std::vector<std::vector<CEdge> > edgesList;
+    bool getEdge(size_t firstVertexIndex, size_t secondVertexIndex, std::vector<CEdge>::iterator& result);
 };
 
 #endif // CGRAPH_H
