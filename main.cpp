@@ -17,6 +17,7 @@ CNetwork readInput()
 
 int main()
 {
+    std::ios_base::sync_with_stdio(false);
     freopen("input.txt", "r", stdin);
     CNetwork network = readInput();
     network.algorithmEdmondsKarp();

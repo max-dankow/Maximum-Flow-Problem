@@ -36,9 +36,8 @@ public:
     CGraph(size_t newVerticesAmount);
     void addEdge(const CEdge &newEdge);
     bool getEdge(size_t firstVertexIndex, size_t secondVertexIndex, std::vector<CEdge>::iterator& result);
-    void depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<size_t> &way);
-    void breadthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<ssize_t> &ancestors);
-private:
+    void depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<size_t> &way) const;
+    void breadthFirstSearch(size_t startVertexIndex, std::vector<bool> &visited, std::vector<ssize_t> &ancestors);
     size_t verticesAmount;
 };
 

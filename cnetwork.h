@@ -9,7 +9,7 @@ public:
     CNetwork(size_t newVerticesAmount, size_t newSource, size_t newSink):
         graph(CGraph(newVerticesAmount)), sourceVertex(newSource), sinkVertex(newSink){}
     void algorithmEdmondsKarp();
-    double getFlowAmount();
+    double getFlowAmount() const;
 private:
     size_t sourceVertex, sinkVertex;
 };

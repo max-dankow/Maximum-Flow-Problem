@@ -11,7 +11,7 @@ void CGraph::addEdge(const CEdge &newEdge)
     edgesList[newEdge.firstVertexIndex].push_back(newEdge);
 }
 
-void CGraph::depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<size_t> &way)
+void CGraph::depthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<size_t> &way) const
 {
     assert(vertexIndex < verticesAmount);
     visited[vertexIndex] = true;
@@ -39,13 +39,11 @@ bool CGraph::getEdge(size_t firstVertexIndex, size_t secondVertexIndex, std::vec
 }
 
 
-void CGraph::breadthFirstSearch(size_t vertexIndex, std::vector<bool> &visited, std::vector<ssize_t> &ancestors)
+void CGraph::breadthFirstSearch(size_t startVertexIndex, std::vector<bool> &visited, std::vector<ssize_t> &ancestors)
 {
-    visited.assign(verticesAmount, false);
-    ancestors.assign(verticesAmount, NO_ANCESTOR);
     std::queue<size_t> verticesQueue;
-    verticesQueue.push(vertexIndex);
-    visited[vertexIndex] = true;
+    verticesQueue.push(startVertexIndex);
+    visited[startVertexIndex] = true;
 
     while(!verticesQueue.empty())
     {

@@ -13,9 +13,8 @@ void CNetwork::algorithmEdmondsKarp()
     while(true)
     {
       //находим кратчайший путь в остаточной сети
-      //bfs
-        std::vector<bool> visited;
-        std::vector<ssize_t> ancestors;
+        std::vector<bool> visited(graph.verticesAmount, false);
+        std::vector<ssize_t> ancestors(graph.verticesAmount, graph.NO_ANCESTOR);
         graph.breadthFirstSearch(sourceVertex, visited, ancestors);
       //восстановить путь ведущий в sink, если NO_ANCESTOR, то закончить
         if (ancestors[sinkVertex] == graph.NO_ANCESTOR)
@@ -26,8 +25,7 @@ void CNetwork::algorithmEdmondsKarp()
       //находим ребро в остаточной сети с минимальной остаточной пропускной способностью
         std::vector<CEdge>::iterator currentEdge;
         graph.getEdge(ancestors[sinkVertex], sinkVertex, currentEdge);
-        //CEdge edge
-        double minCapacityOnWay = (*currentEdge).capacity;
+        double minCapacityOnWay = currentEdge->capacity;
         while(currentVertex != sourceVertex)
         {
             graph.getEdge(ancestors[currentVertex], currentVertex, currentEdge);
@@ -37,21 +35,25 @@ void CNetwork::algorithmEdmondsKarp()
             }
             currentVertex = ancestors[currentVertex];
         }
-      //перебираем все ребра и обратные ребра на пути
+      //перебираем все ребра и обратные ребра на пути и изменяем flow и capacity
         currentVertex = sinkVertex;
         while(currentVertex != sourceVertex)
         {
+          //обновляем прямые ребра пути
             graph.getEdge(ancestors[currentVertex], currentVertex, currentEdge);
             currentEdge->capacity -= minCapacityOnWay;
             currentEdge->flow += minCapacityOnWay;
+          //удаляем обнулившиеся ребра из остаточной сети
             if (currentEdge->capacity <= 0)
             {
                 currentEdge->weight = std::numeric_limits<double>::infinity();
             }
+          //обновляем обратные ребра пути, если они есть
             if (graph.getEdge(currentVertex, ancestors[currentVertex], currentEdge))
             {
                 currentEdge->capacity += minCapacityOnWay;
                 currentEdge->flow -= minCapacityOnWay;
+              //удаляем обнулившиеся ребра из остаточной сети
                 if (currentEdge->capacity <= 0)
                 {
                     currentEdge->weight = std::numeric_limits<double>::infinity();
@@ -62,12 +64,12 @@ void CNetwork::algorithmEdmondsKarp()
     }
 }
 
-double CNetwork::getFlowAmount()
+double CNetwork::getFlowAmount() const
 {
     double flowSum = 0;
-    for (auto edgesIt = graph.edgesList[sourceVertex].begin(); edgesIt != graph.edgesList[sourceVertex].end(); ++edgesIt)
+    for (CEdge edge : graph.edgesList[sourceVertex])
     {
-        flowSum += edgesIt->flow;
+        flowSum += edge.flow;
     }
     return flowSum;
 }
